@@ -3,7 +3,9 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { Station } from './interfaces/station.interface';
-import { Route } from './interfaces/route.interface';
+import { Track } from './interfaces/route.interface';
+import { Vehicle } from './interfaces/vehicle.interface';
+import { TrainInfo, TrainResponse } from './interfaces/train.interface';
 
 @Injectable()
 export class NsService {
@@ -44,40 +46,62 @@ export class NsService {
     if (cached) return cached;
 
     const response = await firstValueFrom(
-      this.httpService.get<Station[]>(`${this.baseUrl}/stations/v2`, {
+      this.httpService.get<{ payload: Station[] }>(`${this.baseUrl}/nsapp-stations/v3?countryCodes=nl`, {
         headers: this.getHeaders(),
       })
     );
-    this.setCache(cacheKey, response.data);
-    return response.data;
+    this.setCache(cacheKey, response.data.payload);
+    return response.data.payload;
   }
 
-  async getRoutes(from: string, to: string): Promise<Route[]> {
-    const cacheKey = `routes:${from}:${to}`;
-    const cached = await this.getFromCache<Route[]>(cacheKey);
+  async getTracks(): Promise<Track[]> {
+    const cacheKey = 'tracks';
+    const cached = await this.getFromCache<Track[]>(cacheKey);
     if (cached) return cached;
 
     const response = await firstValueFrom(
-      this.httpService.get<Route[]>(`${this.baseUrl}/reisinformatie-api/api/v3/trips`, {
+      this.httpService.get<{ payload: Track[] }>(`${this.baseUrl}/Spoorkaart-API/api/v1/spoorkaart`, {
         headers: this.getHeaders(),
-        params: { fromStation: from, toStation: to }
       })
     );
-    this.setCache(cacheKey, response.data);
-    return response.data;
+    this.setCache(cacheKey, response.data.payload);
+    return response.data.payload;
   }
 
   async getStationDetails(code: string): Promise<Station> {
-    const cacheKey = `station:${code}`;
-    const cached = await this.getFromCache<Station>(cacheKey);
+    const stations = await this.getStations();
+    const station = stations.find(s => s.id.code === code);
+    if (!station) {
+      throw new Error(`Station with code ${code} not found`);
+    }
+    return station;
+  }
+
+  async getVehicles(): Promise<Vehicle[]> {
+    const cacheKey = 'vehicles';
+    const cached = await this.getFromCache<Vehicle[]>(cacheKey);
     if (cached) return cached;
 
     const response = await firstValueFrom(
-      this.httpService.get<Station>(`${this.baseUrl}/stations/v2/${code}`, {
+      this.httpService.get<{ payload: Vehicle[] }>(`${this.baseUrl}/virtual-train-api/vehicle`, {
+        headers: this.getHeaders(),
+      })
+    );
+    this.setCache(cacheKey, response.data.payload);
+    return response.data.payload;
+  }
+
+  async getTrains(): Promise<TrainResponse> {
+    const cacheKey = 'trains';
+    const cached = await this.getFromCache<TrainResponse>(cacheKey);
+    if (cached) return cached;
+
+    const response = await firstValueFrom(
+      this.httpService.get<TrainResponse>(`${this.baseUrl}/virtual-train-api/v1/trein`, {
         headers: this.getHeaders(),
       })
     );
     this.setCache(cacheKey, response.data);
     return response.data;
   }
-}
+} 

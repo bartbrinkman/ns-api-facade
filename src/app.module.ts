@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { NsModule } from './ns/ns.module';
+import { NsService } from './ns.service';
 import configuration from './config/configuration';
+import { OpenApiModule } from './openapi/openapi.module';
+import { OpenApiController } from './openapi/openapi.controller';
+import { OpenApiService } from './openapi/openapi.service';
 
 @Module({
   imports: [
@@ -11,9 +14,10 @@ import configuration from './config/configuration';
       isGlobal: true,
       load: [configuration],
     }),
-    NsModule,
+    HttpModule,
+    OpenApiModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, OpenApiController],
+  providers: [NsService, OpenApiService],
 })
 export class AppModule {}

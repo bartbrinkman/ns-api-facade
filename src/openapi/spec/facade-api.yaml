@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: NS API Facade
+  version: 1.0.0
+  description: A facade API for NS services
+
+components:
+  schemas:
+    TreinDeel:
+      type: object
+      properties:
+        materieelNummer:
+          type: integer
+          description: Train part number
+        type:
+          type: string
+          description: Type of train
+        vervoerder:
+          type: string
+          description: Train operator
+        lengteInMeters:
+          type: integer
+          description: Length of the train part in meters
+
+    StationTreinInfo:
+      type: object
+      properties:
+        stationCode:
+          type: string
+          description: Station code
+        dienstregelingDag:
+          type: string
+          format: date
+          description: Schedule day
+        vertrektijd:
+          type: string
+          format: date-time
+          description: Departure time
+        bron:
+          type: string
+          description: Source of information
+        treinnummer:
+          type: integer
+          description: Train number
+        treindelen:
+          type: array
+          items:
+            $ref: '#/components/schemas/TreinDeel'
+          description: Train parts
+        spoor:
+          type: string
+          description: Track number
+
+    TrainResponse:
+      type: object
+      description: Map of train numbers to station information
+      additionalProperties:
+        type: object
+        description: Map of station codes to train information for a specific train number
+        additionalProperties:
+          $ref: '#/components/schemas/StationTreinInfo'
+      example:
+        "121":
+          "ASD":
+            stationCode: "ASD"
+            dienstregelingDag: "2025-04-29"
+            vertrektijd: "2025-04-29T04:38:00"
+            bron: "DVS"
+            treinnummer: 121
+            treindelen:
+              - materieelNummer: 8016
+                type: "ICE-3NEO"
+                vervoerder: "NS Int"
+                lengteInMeters: 20000
+            spoor: "7b"
+          "AH":
+            stationCode: "AH"
+            dienstregelingDag: "2025-04-29"
+            vertrektijd: "2025-04-29T05:42:00"
+            bron: "DVS"
+            treinnummer: 121
+            treindelen:
+              - materieelNummer: 8016
+                type: "ICE-3NEO"
+                vervoerder: "NS Int"
+                lengteInMeters: 20000
+            spoor: "8" 

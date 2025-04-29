@@ -78,9 +78,9 @@ http://localhost:3000/api
 
 ## Available Endpoints
 
-- `GET /ns/stations` - Get all stations
-- `GET /ns/stations/:code` - Get station details by code
-- `GET /ns/routes?from=:from&to=:to` - Get routes between stations
+- `GET /stations` - Get all stations
+- `GET /stations/:code` - Get station details by code
+- `GET /routes?from=:from&to=:to` - Get routes between stations
 
 ## Run tests
 
