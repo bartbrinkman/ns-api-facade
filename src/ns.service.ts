@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { Station } from './interfaces/station.interface';
-import { Track } from './interfaces/route.interface';
-import { Vehicle } from './interfaces/vehicle.interface';
-import { TrainInfo, TrainResponse } from './interfaces/train.interface';
+import { StationV3 } from './generated/nsapp-stations/models/StationV3';
+import { Feature } from './generated/spoorkaart/models/Feature';
+import { Trein } from './generated/virtual-train/models/Trein';
+import { TrainResponse } from './generated/facade/models/TrainResponse';
 
 @Injectable()
 export class NsService {
@@ -40,13 +40,13 @@ export class NsService {
     };
   }
 
-  async getStations(): Promise<Station[]> {
+  async getStations(): Promise<StationV3[]> {
     const cacheKey = 'stations';
-    const cached = await this.getFromCache<Station[]>(cacheKey);
+    const cached = await this.getFromCache<StationV3[]>(cacheKey);
     if (cached) return cached;
 
     const response = await firstValueFrom(
-      this.httpService.get<{ payload: Station[] }>(`${this.baseUrl}/nsapp-stations/v3?countryCodes=nl`, {
+      this.httpService.get<{ payload: StationV3[] }>(`${this.baseUrl}/nsapp-stations/v3?countryCodes=nl`, {
         headers: this.getHeaders(),
       })
     );
@@ -54,13 +54,13 @@ export class NsService {
     return response.data.payload;
   }
 
-  async getTracks(): Promise<Track[]> {
+  async getTracks(): Promise<Feature[]> {
     const cacheKey = 'tracks';
-    const cached = await this.getFromCache<Track[]>(cacheKey);
+    const cached = await this.getFromCache<Feature[]>(cacheKey);
     if (cached) return cached;
 
     const response = await firstValueFrom(
-      this.httpService.get<{ payload: Track[] }>(`${this.baseUrl}/Spoorkaart-API/api/v1/spoorkaart`, {
+      this.httpService.get<{ payload: Feature[] }>(`${this.baseUrl}/Spoorkaart-API/api/v1/spoorkaart`, {
         headers: this.getHeaders(),
       })
     );
@@ -68,7 +68,7 @@ export class NsService {
     return response.data.payload;
   }
 
-  async getStationDetails(code: string): Promise<Station> {
+  async getStationDetails(code: string): Promise<StationV3> {
     const stations = await this.getStations();
     const station = stations.find(s => s.id.code === code);
     if (!station) {
@@ -77,13 +77,13 @@ export class NsService {
     return station;
   }
 
-  async getVehicles(): Promise<Vehicle[]> {
+  async getVehicles(): Promise<Trein[]> {
     const cacheKey = 'vehicles';
-    const cached = await this.getFromCache<Vehicle[]>(cacheKey);
+    const cached = await this.getFromCache<Trein[]>(cacheKey);
     if (cached) return cached;
 
     const response = await firstValueFrom(
-      this.httpService.get<{ payload: Vehicle[] }>(`${this.baseUrl}/virtual-train-api/vehicle`, {
+      this.httpService.get<{ payload: Trein[] }>(`${this.baseUrl}/virtual-train-api/vehicle`, {
         headers: this.getHeaders(),
       })
     );

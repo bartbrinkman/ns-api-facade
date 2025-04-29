@@ -1,10 +1,10 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { NsService } from './ns.service';
-import { Station } from './interfaces/station.interface';
-import { Track } from './interfaces/route.interface';
-import { Vehicle } from './interfaces/vehicle.interface';
-import { TrainResponse } from './interfaces/train.interface';
+import { StationV3 } from './generated/nsapp-stations/models/StationV3';
+import { Feature } from './generated/spoorkaart/models/Feature';
+import { Trein } from './generated/virtual-train/models/Trein';
+import { TrainResponse } from './generated/facade/models/TrainResponse';
 import { OpenApiService } from './openapi/openapi.service';
 
 @ApiTags('api')
@@ -27,7 +27,7 @@ export class AppController {
       }
     }
   })
-  async getStations(): Promise<Station[]> {
+  async getStations(): Promise<StationV3[]> {
     return this.nsService.getStations();
   }
 
@@ -40,7 +40,7 @@ export class AppController {
          $ref: '#/components/schemas/StationV3'
     }
   })
-  async getStationDetails(@Param('code') code: string): Promise<Station> {
+  async getStationDetails(@Param('code') code: string): Promise<StationV3> {
     return this.nsService.getStationDetails(code);
   }
 
@@ -53,7 +53,7 @@ export class AppController {
          $ref: '#/components/schemas/FeatureCollection' 
     }
   })
-  async getTracks(): Promise<Track[]> {
+  async getTracks(): Promise<Feature[]> {
     return this.nsService.getTracks();
   }
 
@@ -69,7 +69,7 @@ export class AppController {
       }
     }
   })
-  async getVehicles(): Promise<Vehicle[]> {
+  async getVehicles(): Promise<Trein[]> {
     return this.nsService.getVehicles();
   }
 
