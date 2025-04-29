@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from '../src/app.controller';
-import { NsService } from '../src/ns.service';
+import { NsService } from '../src/ns/ns.service';
 import { OpenApiService } from '../src/openapi/openapi.service';
 import { mockStation, mockTrack, mockVehicle, mockTrainResponse } from './utils/test-fixtures';
 

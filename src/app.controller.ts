@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { NsService } from './ns.service';
+import { NsService } from './ns/ns.service';
 import { StationV3 } from './generated/nsapp-stations/models/StationV3';
 import { Feature } from './generated/spoorkaart/models/Feature';
 import { Trein } from './generated/virtual-train/models/Trein';

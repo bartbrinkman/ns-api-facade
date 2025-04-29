@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { HttpModule } from '@nestjs/axios';
 import { AppController } from './app.controller';
-import { NsService } from './ns.service';
 import configuration from './config/configuration';
 import { OpenApiModule } from './openapi/openapi.module';
-import { OpenApiController } from './openapi/openapi.controller';
 import { OpenApiService } from './openapi/openapi.service';
+import { NsModule } from './ns/ns.module';
 
 @Module({
   imports: [
@@ -14,10 +12,10 @@ import { OpenApiService } from './openapi/openapi.service';
       isGlobal: true,
       load: [configuration],
     }),
-    HttpModule,
     OpenApiModule,
+    NsModule,
   ],
-  controllers: [AppController, OpenApiController],
-  providers: [NsService, OpenApiService],
+  controllers: [AppController],
+  providers: [OpenApiService],
 })
 export class AppModule {}

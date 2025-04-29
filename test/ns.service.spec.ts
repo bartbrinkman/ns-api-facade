@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { of, throwError } from 'rxjs';
-import { NsService } from '../src/ns.service';
+import { NsService } from '../src/ns/ns.service';
 import { Station } from '../src/interfaces/station.interface';
 import { Track } from '../src/interfaces/route.interface';
 import { Vehicle } from '../src/interfaces/vehicle.interface';

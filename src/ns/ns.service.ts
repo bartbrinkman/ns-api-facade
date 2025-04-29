@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { StationV3 } from './generated/nsapp-stations/models/StationV3';
-import { Feature } from './generated/spoorkaart/models/Feature';
-import { Trein } from './generated/virtual-train/models/Trein';
-import { TrainResponse } from './generated/facade/models/TrainResponse';
+import { StationV3 } from '../generated/nsapp-stations/models/StationV3';
+import { Feature } from '../generated/spoorkaart/models/Feature';
+import { Trein } from '../generated/virtual-train/models/Trein';
+import { TrainResponse } from '../generated/facade/models/TrainResponse';
 
 @Injectable()
 export class NsService {
@@ -72,7 +72,7 @@ export class NsService {
     const stations = await this.getStations();
     const station = stations.find(s => s.id.code === code);
     if (!station) {
-      throw new Error(`Station with code ${code} not found`);
+      throw new NotFoundException(`Station with code ${code} not found`);
     }
     return station;
   }
