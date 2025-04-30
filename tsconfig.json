@@ -11,18 +11,19 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
+    "skipLibCheck": true,
     "paths": {
       "@generated/*": ["src/generated/*"],
       "@src/*": ["src/*"]
-    },
-    "rootDir": "src"
+    }
   },
-  "include": ["src/**/*", "test/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "scripts",
+    "**/*spec.ts"
+  ]
 }
