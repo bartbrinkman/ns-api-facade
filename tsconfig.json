@@ -21,7 +21,7 @@
       "@generated/*": ["src/generated/*"],
       "@src/*": ["src/*"]
     },
-    "rootDir": "."
+    "rootDir": "src"
   },
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]
